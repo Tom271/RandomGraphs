@@ -10,7 +10,11 @@ function [edgesum,time]=onelink(n,p,iterations)
         hamiltonian=(m*beta);
     end
     
-    G=spalloc(n,n,(n^2)*p); %preallocate sparse matrix
+    %G=spalloc(n,n,(n^2)*p); %preallocate sparse matrix
+    G=sprandsym(n,p);
+    G(:,:)=logical(G(:,:)); % Set nonzero elements to 1
+    
+    
     edgesum=zeros(p*n^2,1);
     time=zeros(iterations,1);
     time(1)=0;
