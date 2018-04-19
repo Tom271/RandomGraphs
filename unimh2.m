@@ -1,5 +1,5 @@
 function [edgedist,time]= unimh2(n,p,iterations)
-
+tic
     edgesum = zeros(n^2,1);
     time=zeros(iterations,1);
     windowWidth = 2;
@@ -41,31 +41,34 @@ function [edgedist,time]= unimh2(n,p,iterations)
             endfor
         endif    
         
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    
-    %Metropolis Hastings
-    beta=log(p/(1-p));
-    deltaH=beta*(size(propedgeList,1)-size(edgeList,1));
-    
-    if log(rand) <deltaH+deltaQ(size(edgeList,1),n,delta)
-        edgeList=propedgeList;
-    endif
-    
-    m = size(edgeList,1); % Count edges
-    edgesum(m+1) = edgesum(m+1) + 1;
-    time(l) = m;
+        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        
+        %Metropolis Hastings
+        beta=log(p/(1-p));
+        deltaH=beta*(size(propedgeList,1)-size(edgeList,1))
+        
+        if log(rand) < deltaH+deltaQ(size(edgeList,1),n,delta)
+            edgeList=propedgeList;
+        endif
+        
+        m = size(edgeList,1); % Count edges
+        edgesum(m+1) = edgesum(m+1) + 1;
+        time(l) = m;
     endfor
     
     % Normalise to create mass function
-    edgedist = edgesum/sum(edgesum);
+    edgedist = edgesum(edgesum~=0);%/sum(edgesum);
 
     function propdist = deltaQ(m,n,delta)
         %propdist=gammaln(0.5*n*(n-1)-m+1)-2*gammaln(0.5*n*(n-1)-m-delta+1)+gammaln(0.5*n*(n-1)-m-2*delta+1);
-        propdist=log(0.5*n*(n-1)-m)-log(0.5*n*(n-1)-m-1);
+        
+        %If delta+-1 then propdist reduces to:  
+        propdist=log((0.5*n*(n-1)-m)/(0.5*n*(n-1)-m-1));
+        %Is there a similar simple form for all delta? Saves invoking gammaln
 %        if m<delta
 %            propdist = 0;
 %        endif 
     endfunction
-
+toc
 endfunction
         
