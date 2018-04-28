@@ -1,3 +1,4 @@
+%%Edge List version of the unimh algorithm - doesn't work, very slow.
 function [edgedist,time]= unimh2(n,p,iterations)
 tic
     edgesum = zeros(n^2,1);
