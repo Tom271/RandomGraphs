@@ -1,7 +1,7 @@
 %% M-H Algorithm for producing random graphs
 %%     on n vertices with predefined link probability p
 %%     by changing one link at a time.
-
+% Loop to assess convergence speed
 function [stoppingTime,time]=LOOPonelink(n,p,iterations,loopLength)
     tic 
     function hamiltonian=H(G,p)
@@ -23,6 +23,7 @@ function [stoppingTime,time]=LOOPonelink(n,p,iterations,loopLength)
             j=randi(n);
             while i==j  %make sure not changing diagonal entries
                 i=randi(n);
+                j=randi(n);
             end
             Gprop(i,j)=1-G(i,j); %Break a link if there is one, make one if there isn't
             Gprop(j,i)=Gprop(i,j); %Force symmetry in the matrix
@@ -39,13 +40,13 @@ function [stoppingTime,time]=LOOPonelink(n,p,iterations,loopLength)
             time(k+1,l)=m;
         end
         hold on;
-        figure(2);
+        figure(1);
         plt=plot(time(1:stoppingTime(l),l));
         plt.Color(4) = 0.35;
     end
     maxTime=max(stoppingTime);
     avgTimeSeries=sum(time,2)./sum(time~=0,2);
-    figure(2);plot(avgTimeSeries(1:maxTime),'LineWidth',3,'color','g')
+    figure(1);plot(avgTimeSeries(1:maxTime),'LineWidth',3,'color','g')
     toc
 end
 
