@@ -51,6 +51,7 @@ function [edgedist,time]= unimh(n,p,iterations)
 
     function propdist = Q(G,n,delta)
         m=sum(sum(G))/2;
+        %Not sure where I got this from
         propdist=-gammaln(0.5*n*(n-1)-m+1)+gammaln(0.5*n*(n-1)-m-delta+1) + gammaln(delta+1);
         if m<delta
             propdist = 0;
